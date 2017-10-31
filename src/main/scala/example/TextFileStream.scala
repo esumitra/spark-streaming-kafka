@@ -23,7 +23,7 @@ object TextFileStream {
     val ssc =
       SparkUtils
         .streamingContext(SparkStreamingConfiguration(
-          "stream", Some("local[*]"), Seconds(20)))
+          "stream", None, Seconds(20)))
     ssc.checkpoint(checkpointDir)
     val fstream = fileStream(ssc, inDir)
     val batchTuples = uidCounts(fstream)

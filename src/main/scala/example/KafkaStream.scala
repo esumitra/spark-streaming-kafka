@@ -17,7 +17,7 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
 /**
-  * $SPARK_HOME/bin/spark-submit --class "example.KafkaStream" --master local[4] /Users/esumitra/workspaces/scala/spark-streaming-kafka/target/scala-2.11/spark-streams.jar 192.168.1.112:9092 topic1
+  * $SPARK_HOME/bin/spark-submit --class "example.KafkaStream" --master local[4] /Users/esumitra/workspaces/scala/spark-streaming-kafka/target/scala-2.11/spark-streams.jar 192.168.1.112:9092 topic
   * args0 - kafka_host:kafka_port
   * args1 - topic
   */
@@ -29,7 +29,7 @@ object KafkaStream {
     val ssc =
       SparkUtils
         .streamingContext(SparkStreamingConfiguration(
-          "stream", Some("local[*]"), Seconds(30)))
+          "stream", None, Seconds(30)))
 
     val kstream = kafkaStream(ssc,kafkaHostPort, topic)
     val wc = userCounts(kstream)
@@ -52,7 +52,7 @@ object KafkaStream {
       "auto.offset.reset" -> "latest",
       "enable.auto.commit" -> (false: java.lang.Boolean)
     )
-    val topics = Array(topicsStr)
+    val topics = topicsStr.split(",")
     val stream = KafkaUtils.createDirectStream[String, String](
       ssc,
       PreferConsistent,

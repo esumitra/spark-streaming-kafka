@@ -16,4 +16,3 @@ case class SparkStreamingConfiguration(
   masterConf: Option[String],
   duration: Duration)
 
-Sp
